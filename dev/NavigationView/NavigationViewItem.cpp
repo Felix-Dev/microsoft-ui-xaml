@@ -257,8 +257,8 @@ void NavigationViewItem::ShowSelectionIndicator(bool visible)
 {
     if (auto const selectionIndicator = GetSelectionIndicator())
     {
-        auto const visibility = visible ? winrt::Visibility::Visible : winrt::Visibility::Collapsed;
-        selectionIndicator.Visibility(visibility);
+        auto const opacity = visible ? 1.0 : 0.0;
+        selectionIndicator.Opacity(opacity);
     }
 }
 
