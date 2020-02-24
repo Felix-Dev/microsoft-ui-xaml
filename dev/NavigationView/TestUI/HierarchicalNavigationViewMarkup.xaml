@@ -15,7 +15,7 @@
             <muxcontrols:NavigationView.MenuItems>
                 <muxcontrols:NavigationViewItem Content="Menu Item 1" Icon="Home" x:Name="MI1" SelectsOnInvoked="False">
                     <muxcontrols:NavigationViewItem.MenuItems>
-                        <muxcontrols:NavigationViewItem Content="Menu Item 2" Icon="Save" x:Name="MI2" SelectsOnInvoked="False">
+                        <muxcontrols:NavigationViewItem Content="Menu Item 2" Icon="Save" x:Name="MI2" SelectsOnInvoked="True">
                             <muxcontrols:NavigationViewItem.MenuItems>
                                 <muxcontrols:NavigationViewItem Content="Menu Item 3" Icon="Paste" x:Name="MI3" />
                                 <muxcontrols:NavigationViewItem Content="Menu Item 4" Icon="Cut" x:Name="MI4" />

@@ -126,6 +126,7 @@ private:
     bool DoesNavigationViewItemHaveChildren(const winrt::NavigationViewItem& nvi);
     bool IsTopLevelItem(const winrt::NavigationViewItemBase& nvib);
     winrt::IInspectable GetChildren(const winrt::NavigationViewItem& nvi);
+    bool IsContainerInFlyout(const winrt::NavigationViewItemBase& nvib);
 
     // Hierarchy related functions
     void ToggleIsExpandedNavigationViewItem(const winrt::NavigationViewItem& nvi);
@@ -136,6 +137,7 @@ private:
     void CollapseAllMenuItems(const winrt::ItemsRepeater& ir);
     void RaiseExpandingEvent(const winrt::NavigationViewItemBase& container);
     void RaiseCollapsedEvent(const winrt::NavigationViewItemBase& container);
+    void CloseFlyoutIfRequired(const winrt::IndexPath& selectedIndex);
 
     // Force realization functions
     winrt::NavigationViewItemBase ResolveContainerForItem(const winrt::IInspectable& item, int index);

@@ -211,9 +211,9 @@ void NavigationView::OnSelectionModelSelectionChanged(const winrt::SelectionMode
         return;
     }
 
+    auto const selectedIndex = selectionModel.SelectedIndex();
     if (IsTopNavigationView())
     {
-        auto selectedIndex = selectionModel.SelectedIndex();
         // If selectedIndex does not exist, means item is being deselected through API
         auto isInOverflow = (selectedIndex && selectedIndex.GetSize() > 0) ? !m_topDataProvider.IsItemInPrimaryList(selectedIndex.GetAt(0)) : false;
         if (isInOverflow)
@@ -254,17 +254,44 @@ void NavigationView::OnSelectionModelSelectionChanged(const winrt::SelectionMode
             {
                 // TODO: Add flag that keeps track of the fact that item will need to be moved if no leaf
                 // item is selected.
+                CloseFlyoutIfRequired(selectedIndex);
                 SetSelectedItemAndExpectItemInvokeWhenSelectionChangedIfNotInvokedFromAPI(selectedItem);
             }
-        }
+        } 
         else
         {
+            CloseFlyoutIfRequired(selectedIndex);
             SetSelectedItemAndExpectItemInvokeWhenSelectionChangedIfNotInvokedFromAPI(selectedItem);
         }
     }
     else
     {
+        CloseFlyoutIfRequired(selectedIndex);
         SetSelectedItemAndExpectItemInvokeWhenSelectionChangedIfNotInvokedFromAPI(selectedItem);
+    }
+}
+
+void NavigationView::CloseFlyoutIfRequired(const winrt::IndexPath& selectedIndex)
+{
+    if (auto const rootItem = GetContainerForIndex(selectedIndex.GetAt(0)))
+    {
+        if (auto const nvi = rootItem.try_as<winrt::NavigationViewItem>())
+        {
+            if (auto const selectedItem = GetContainerForIndexPath(selectedIndex))
+            {
+                if (auto const selectedNVI = selectedItem.try_as<winrt::NavigationViewItem>())
+                {
+                    if (!DoesNavigationViewItemHaveChildren(selectedNVI))
+                    {
+                        auto const nviImpl = winrt::get_self<NavigationViewItem>(nvi);
+                        if (nviImpl->ShouldRepeaterShowInFlyout())
+                        {
+                            nviImpl->IsRepeaterVisible(false);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -697,6 +724,22 @@ bool NavigationView::IsRootGridOfFlyout(const winrt::DependencyObject& element)
     {
         return grid.Name() == c_flyoutRootGrid;
     }
+    return false;
+}
+
+bool NavigationView::IsContainerInFlyout(const winrt::NavigationViewItemBase& nvib)
+{
+    winrt::DependencyObject parent = nvib;
+    do
+    {
+        parent = winrt::VisualTreeHelper::GetParent(parent);
+        if (IsRootGridOfFlyout(parent))
+        {
+            return true;
+        }
+
+    } while (parent && !IsRootItemsRepeater(parent));
+
     return false;
 }
 
