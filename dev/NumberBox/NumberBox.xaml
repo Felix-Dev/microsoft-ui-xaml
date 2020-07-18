@@ -100,7 +100,7 @@
                             Foreground="{ThemeResource TextControlHeaderForeground}"
                             Margin="{ThemeResource TextBoxTopHeaderMargin}"
                             FontSize="{TemplateBinding FontSize}"
-                            FontFamily="{TemplateBinding FontFamily}"
+                            FontFamily="{TemplateBinding FontFamily}"                            
                             TextWrapping="Wrap"
                             VerticalAlignment="Top"
                             Visibility="Collapsed"

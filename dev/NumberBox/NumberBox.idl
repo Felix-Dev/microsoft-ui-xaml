@@ -18,6 +18,14 @@ enum NumberBoxValidationMode
     Disabled
 };
 
+[WUXC_VERSION_PREVIEW]
+[webhosthidden]
+enum NumberBoxNumeralSystemMode
+{
+    Decimal,
+    Hexadecimal
+};
+
 [WUXC_VERSION_MUXONLY]
 [webhosthidden]
 runtimeclass NumberBoxValueChangedEventArgs

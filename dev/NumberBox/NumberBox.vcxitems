@@ -14,7 +14,9 @@
     <ProjectCapability Include="SourceItemsFromImports" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\Generated\HexadecimalFormatter.properties.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\Generated\NumberBox.properties.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)HexadecimalFormatter.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)NumberBox.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)NumberBoxAutomationPeer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)NumberBoxParser.cpp" />
@@ -30,9 +32,11 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Midl Include="$(MSBuildThisFileDirectory)HexadecimalFormatter.idl" />
     <Midl Include="$(MSBuildThisFileDirectory)NumberBox.idl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)HexadecimalFormatter.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)NumberBox.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)NumberBoxAutomationPeer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)NumberBoxParser.h" />

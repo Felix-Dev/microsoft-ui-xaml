@@ -61,6 +61,33 @@ namespace MUXControlsTestApp
             }
         }
 
+        private void NumeralSystemComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (TestNumberBox != null)
+            {
+                if (this.NumeralSystemComboBox.SelectedIndex == 0)
+                {
+                    // Decimal numeral system
+
+                    var formatter = new DecimalFormatter {
+                        IntegerDigits = 1,
+                        FractionDigits = 0
+                    };
+
+                    this.TestNumberBox.NumberFormatter = formatter;
+                }
+                else if (this.NumeralSystemComboBox.SelectedIndex == 1)
+                {
+                    // Hexadecimal numeral system
+
+                    // Play with the different properties of the HexadecimalFormatter formatter here.
+                    var formatter = new HexadecimalFormatter();
+
+                    TestNumberBox.NumberFormatter = formatter;
+                }
+            }
+        }
+
         private void MinCheckBox_CheckChanged(object sender, RoutedEventArgs e)
         {
             MinNumberBox.IsEnabled = (bool)MinCheckBox.IsChecked;

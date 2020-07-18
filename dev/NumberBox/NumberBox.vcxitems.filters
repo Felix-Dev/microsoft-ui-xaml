@@ -5,9 +5,18 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)NumberBox.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)NumberBoxAutomationPeer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)NumberBoxParser.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)HexadecimalFormatter.cpp">
+      <Filter>NumberFormatters</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\Generated\HexadecimalFormatter.properties.cpp">
+      <Filter>NumberFormatters</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Midl Include="$(MSBuildThisFileDirectory)NumberBox.idl" />
+    <Midl Include="$(MSBuildThisFileDirectory)HexadecimalFormatter.idl">
+      <Filter>NumberFormatters</Filter>
+    </Midl>
   </ItemGroup>
   <ItemGroup>
     <Page Include="$(MSBuildThisFileDirectory)NumberBox.xaml" />
@@ -17,8 +26,16 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)NumberBox.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)NumberBoxAutomationPeer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)NumberBoxParser.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)HexadecimalFormatter.h">
+      <Filter>NumberFormatters</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <PRIResource Include="$(MSBuildThisFileDirectory)Strings\en-us\Resources.resw" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="NumberFormatters">
+      <UniqueIdentifier>{18640a14-a44b-40c8-af34-9c0406d880f4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

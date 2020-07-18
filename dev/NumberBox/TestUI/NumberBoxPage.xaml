@@ -1,4 +1,4 @@
-<!-- Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT License. See LICENSE in the project root for license information. -->
+﻿<!-- Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT License. See LICENSE in the project root for license information. -->
 <local:TestPage
     x:Class="MUXControlsTestApp.NumberBoxPage"
     x:Name="NumberBoxTestPage"
@@ -9,7 +9,18 @@
     xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:contract5Present="http://schemas.microsoft.com/winfx/2006/xaml/presentation?IsApiContractPresent(Windows.Foundation.UniversalApiContract,5)"
+    xmlns:primitives="using:Microsoft.UI.Xaml.Controls.Primitives"
     mc:Ignorable="d">
+    <local:TestPage.Resources>
+        <!-- A XAML markup example for assigning a HexFormatter instance with a list of input prefixes.
+        It is currently not used but you can always assign it to one of the NumberBox's below, like the "TestNumberBox". -->
+        <controls:HexadecimalFormatter x:Key="HexFormatter" OutputPrefix="{x:Null}">
+            <controls:HexadecimalFormatter.InputPrefixes>
+                <x:String>#</x:String>
+                <x:String>0x</x:String>
+            </controls:HexadecimalFormatter.InputPrefixes>
+        </controls:HexadecimalFormatter>
+    </local:TestPage.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -23,6 +34,11 @@
             <ComboBox x:Name="ValidationComboBox" AutomationProperties.Name="ValidationComboBox" Header="Validation Mode" SelectedIndex="0" SelectionChanged="Validation_Changed">
                 <ComboBoxItem Content="InvalidInputOverwritten"/>
                 <ComboBoxItem Content="Disabled"/>
+            </ComboBox>
+
+            <ComboBox x:Name="NumeralSystemComboBox" AutomationProperties.Name="NumeralSystemComboBox" Header="Numeral System Mode" SelectedIndex="0" SelectionChanged="NumeralSystemComboBox_SelectionChanged">
+                <ComboBoxItem Content="Decimal"/>
+                <ComboBoxItem Content="Hexadecimal"/>
             </ComboBox>
 
             <ComboBox x:Name="SpinModeComboBox" AutomationProperties.Name="SpinModeComboBox" SelectedIndex="0" SelectionChanged="SpinMode_Changed" Header="SpinButtonMode">
@@ -76,16 +92,18 @@
                 <StackPanel>
                     <controls:NumberBox
                         MinWidth="150"
+                        Width="350"
                         x:Name="TestNumberBox"
-                        Description="Description text"
-                        Header="TestNumberBox"
                         PlaceholderText="Text"
                         ValueChanged="NumberBoxValueChanged"
                         SmallChange="{x:Bind SmallChangeNumberBox.Value, Mode=OneWay}"
                         LargeChange="{x:Bind LargeChangeNumberBox.Value, Mode=OneWay}"
                         AcceptsExpression="{x:Bind ExpressionCheckBox.IsChecked.Value, Mode=OneWay}"
                         IsWrapEnabled="{x:Bind WrapCheckBox.IsChecked.Value, Mode=OneWay}"
-                        IsEnabled="{x:Bind EnabledCheckBox.IsChecked.Value, Mode=OneWay}"/>
+                        IsEnabled="{x:Bind EnabledCheckBox.IsChecked.Value, Mode=OneWay}"
+                        SpinButtonPlacementMode="Inline"
+                        Value="256"
+                        />
 
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Value:" Margin="0,0,5,0" />
