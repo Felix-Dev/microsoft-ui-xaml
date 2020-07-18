@@ -6,8 +6,8 @@
 #include <Vector.h>
 #include "HexadecimalFormatter.h"
 
-// digits 0..16 used by hexadecimal numeral system
-static constexpr wstring_view DIGITS = L"0123456789ABCDEF";
+// digits 0..15 used by the hexadecimal numeral system
+static constexpr wstring_view HEX_DIGITS = L"0123456789ABCDEF";
 
 HexadecimalFormatter::HexadecimalFormatter()
 {
@@ -73,7 +73,7 @@ winrt::hstring HexadecimalFormatter::GetStringPrefix(const winrt::hstring& strin
         minDigits = 16;
     }
 
-    auto stringPrefix = OutputPrefix();
+    const auto stringPrefix = OutputPrefix();
     if (minDigits > numDigits)
     {
         // The requested number of digits is more than the actual number of digits needed to represent
@@ -97,7 +97,7 @@ winrt::hstring HexadecimalFormatter::NumberToString(__int64 value, int numDigits
     while (numDigits-- > 0)
     {
         const int curHexValue = (value >> (4 * numDigits)) & 0xF;
-        result += DIGITS[curHexValue];
+        result += HEX_DIGITS[curHexValue];
     }
 
     return winrt::hstring(result);
@@ -172,10 +172,10 @@ winrt::IReference<double> HexadecimalFormatter::ParseDouble(winrt::hstring text)
     uint64_t w64Bits = 0;
     for (int i = 0; i < textLength; i++)
     {
-        // Ee allow both upper and lower case letters for "A" - "F".
+        // We allow both upper and lower case letters for "A" - "F".
         const auto curChar = NormalizeCharDigit(pText[i]);
 
-        const size_t pos = DIGITS.find(curChar);
+        const size_t pos = HEX_DIGITS.find(curChar);
         if (pos != wstring_view::npos)
         {
             // We could successfully convert the current character into its matching numerical
