@@ -14,10 +14,15 @@ runtimeclass HexadecimalFormatter : Windows.UI.Xaml.DependencyObject, Windows.Gl
     [MUX_DEFAULT_VALUE("1")]
     Int32 MinDigits{ get; set; };
 
+    [MUX_DEFAULT_VALUE("false")]
+    Boolean IsGrouped{ get; set; };
+
     static Windows.UI.Xaml.DependencyProperty OutputPrefixProperty{ get; };
     static Windows.UI.Xaml.DependencyProperty InputPrefixesProperty{ get; };
 
     static Windows.UI.Xaml.DependencyProperty MinDigitsProperty{ get; };
+
+    static Windows.UI.Xaml.DependencyProperty IsGroupedProperty{ get; };
 };
 
 }
