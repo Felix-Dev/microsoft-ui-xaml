@@ -11,7 +11,7 @@ static constexpr wstring_view HEX_DIGITS = L"0123456789ABCDEF";
 
 HexadecimalFormatter::HexadecimalFormatter()
 {
-    const auto inputPrefixes = winrt::make<Vector<winrt::IInspectable, MakeVectorParam<VectorFlag::Observable>()>>();
+    const auto inputPrefixes = winrt::make<Vector<winrt::hstring, MakeVectorParam<VectorFlag::Observable>()>>();
     SetValue(s_InputPrefixesProperty, inputPrefixes);
 }
 
@@ -152,7 +152,7 @@ wchar_t* HexadecimalFormatter::TrimLeadingZeroesAndSpaces(wchar_t* text, int* te
 
 winrt::IReference<double> HexadecimalFormatter::ParseDouble(winrt::hstring text)
 {
-    std::wstring wText = std::wstring(text);
+    auto wText = std::wstring(text);
     wchar_t* pText = wText.data();
 
     int textLength = static_cast<int32_t>(wText.length());
@@ -161,20 +161,13 @@ winrt::IReference<double> HexadecimalFormatter::ParseDouble(winrt::hstring text)
 
     for (const auto inputPrefix : InputPrefixes())
     {
-        // TODO: We have to do this if-check for now because InputPrefixes is an IList<object> currently.
-        // It should really be an IList<string> but the generated code does not compile.
-        // I mentioned this issue in the WinUI repo.
-        if (const auto rInputPrefixString = inputPrefix.try_as<winrt::IReference<winrt::hstring>>())
+        if (wText._Starts_with(inputPrefix))
         {
-            const auto inputPrefixString = rInputPrefixString.Value();
-            if (wText._Starts_with(inputPrefixString))
-            {
-                const auto length = inputPrefixString.size();
-                pText += length;
-                textLength -= length;
+            const auto length = inputPrefix.size();
+            pText += length;
+            textLength -= length;
 
-                break;
-            }
+            break;
         }
     }
 

@@ -30,10 +30,10 @@ void HexadecimalFormatterProperties::EnsureProperties()
         s_InputPrefixesProperty =
             InitializeDependencyProperty(
                 L"InputPrefixes",
-                winrt::name_of<winrt::IVector<winrt::IInspectable>>(),
+                winrt::name_of<winrt::IVector<winrt::hstring>>(),
                 winrt::name_of<winrt::HexadecimalFormatter>(),
                 false /* isAttached */,
-                ValueHelper<winrt::IVector<winrt::IInspectable>>::BoxedDefaultValue(),
+                ValueHelper<winrt::IVector<winrt::hstring>>::BoxedDefaultValue(),
                 nullptr);
     }
     if (!s_IsGroupedProperty)
@@ -79,17 +79,17 @@ void HexadecimalFormatterProperties::ClearProperties()
     s_OutputPrefixProperty = nullptr;
 }
 
-void HexadecimalFormatterProperties::InputPrefixes(winrt::IVector<winrt::IInspectable> const& value)
+void HexadecimalFormatterProperties::InputPrefixes(winrt::IVector<winrt::hstring> const& value)
 {
     [[gsl::suppress(con)]]
     {
-    static_cast<HexadecimalFormatter*>(this)->SetValue(s_InputPrefixesProperty, ValueHelper<winrt::IVector<winrt::IInspectable>>::BoxValueIfNecessary(value));
+    static_cast<HexadecimalFormatter*>(this)->SetValue(s_InputPrefixesProperty, ValueHelper<winrt::IVector<winrt::hstring>>::BoxValueIfNecessary(value));
     }
 }
 
-winrt::IVector<winrt::IInspectable> HexadecimalFormatterProperties::InputPrefixes()
+winrt::IVector<winrt::hstring> HexadecimalFormatterProperties::InputPrefixes()
 {
-    return ValueHelper<winrt::IVector<winrt::IInspectable>>::CastOrUnbox(static_cast<HexadecimalFormatter*>(this)->GetValue(s_InputPrefixesProperty));
+    return ValueHelper<winrt::IVector<winrt::hstring>>::CastOrUnbox(static_cast<HexadecimalFormatter*>(this)->GetValue(s_InputPrefixesProperty));
 }
 
 void HexadecimalFormatterProperties::IsGrouped(bool value)

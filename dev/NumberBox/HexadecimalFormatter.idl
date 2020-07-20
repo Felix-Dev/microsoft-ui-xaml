@@ -9,7 +9,7 @@ runtimeclass HexadecimalFormatter : Windows.UI.Xaml.DependencyObject, Windows.Gl
     HexadecimalFormatter();
 
     String OutputPrefix{ get; set; };
-    Windows.Foundation.Collections.IVector<Object> InputPrefixes{ get; };
+    Windows.Foundation.Collections.IVector<String> InputPrefixes{ get; };
 
     [MUX_DEFAULT_VALUE("1")]
     Int32 MinDigits{ get; set; };

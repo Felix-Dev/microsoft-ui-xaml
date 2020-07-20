@@ -9,8 +9,8 @@ class HexadecimalFormatterProperties
 public:
     HexadecimalFormatterProperties();
 
-    void InputPrefixes(winrt::IVector<winrt::IInspectable> const& value);
-    winrt::IVector<winrt::IInspectable> InputPrefixes();
+    void InputPrefixes(winrt::IVector<winrt::hstring> const& value);
+    winrt::IVector<winrt::hstring> InputPrefixes();
 
     void IsGrouped(bool value);
     bool IsGrouped();
