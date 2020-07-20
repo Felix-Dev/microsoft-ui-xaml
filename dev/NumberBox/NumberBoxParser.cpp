@@ -73,8 +73,11 @@ std::vector<MathToken> NumberBoxParser::GetTokens(const wchar_t* input, const wi
 // Attempts to parse a number from the beginning of the given input string. Returns the character size of the matched string.
 std::tuple<double, size_t> NumberBoxParser::GetNextNumber(const std::wstring& input, const winrt::INumberParser& numberParser)
 {
-    // Attempt to parse anything before an operator or space as a number
-    std::wregex regex(L"^-?([^-+/*\\(\\)\\^\\s]+)");
+    // Attempt to parse anything before an operator as a number. In addition, we also don't include trailing spaces here.
+    // Spaces in between symbols will be respected though. For example, an input like "0x1234 5678 + 0x5" passed to regex_search below
+    // will yield the match "0x1234 5678". It is then up to the specified numberParser to determine if spaces between digits
+    // is valid or not.
+    std::wregex regex(L"^-?([^-+/*\\(\\)\\^]*[^-+/*\\(\\)\\^\\s])");
     std::wsmatch match;
     if (std::regex_search(input.cbegin(), input.cend(), match, regex))
     {
