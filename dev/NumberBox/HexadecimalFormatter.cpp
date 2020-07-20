@@ -178,7 +178,7 @@ winrt::IReference<double> HexadecimalFormatter::ParseDouble(winrt::hstring text)
         }
     }
 
-    // Second step: Trim leading zeroes
+    // Second step: Trim leading zeroes and spaces
 
     pText = TrimLeadingZeroesAndSpaces(pText, &textLength);
 
