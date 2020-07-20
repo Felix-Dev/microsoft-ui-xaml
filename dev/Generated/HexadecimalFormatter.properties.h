@@ -12,6 +12,9 @@ public:
     void InputPrefixes(winrt::IVector<winrt::IInspectable> const& value);
     winrt::IVector<winrt::IInspectable> InputPrefixes();
 
+    void IsGrouped(bool value);
+    bool IsGrouped();
+
     void MinDigits(int value);
     int MinDigits();
 
@@ -19,10 +22,12 @@ public:
     winrt::hstring OutputPrefix();
 
     static winrt::DependencyProperty InputPrefixesProperty() { return s_InputPrefixesProperty; }
+    static winrt::DependencyProperty IsGroupedProperty() { return s_IsGroupedProperty; }
     static winrt::DependencyProperty MinDigitsProperty() { return s_MinDigitsProperty; }
     static winrt::DependencyProperty OutputPrefixProperty() { return s_OutputPrefixProperty; }
 
     static GlobalDependencyProperty s_InputPrefixesProperty;
+    static GlobalDependencyProperty s_IsGroupedProperty;
     static GlobalDependencyProperty s_MinDigitsProperty;
     static GlobalDependencyProperty s_OutputPrefixProperty;
 

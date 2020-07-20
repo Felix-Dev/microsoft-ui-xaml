@@ -14,6 +14,7 @@ namespace winrt::Microsoft::UI::Xaml::Controls
 #include "HexadecimalFormatter.g.cpp"
 
 GlobalDependencyProperty HexadecimalFormatterProperties::s_InputPrefixesProperty{ nullptr };
+GlobalDependencyProperty HexadecimalFormatterProperties::s_IsGroupedProperty{ nullptr };
 GlobalDependencyProperty HexadecimalFormatterProperties::s_MinDigitsProperty{ nullptr };
 GlobalDependencyProperty HexadecimalFormatterProperties::s_OutputPrefixProperty{ nullptr };
 
@@ -33,6 +34,17 @@ void HexadecimalFormatterProperties::EnsureProperties()
                 winrt::name_of<winrt::HexadecimalFormatter>(),
                 false /* isAttached */,
                 ValueHelper<winrt::IVector<winrt::IInspectable>>::BoxedDefaultValue(),
+                nullptr);
+    }
+    if (!s_IsGroupedProperty)
+    {
+        s_IsGroupedProperty =
+            InitializeDependencyProperty(
+                L"IsGrouped",
+                winrt::name_of<bool>(),
+                winrt::name_of<winrt::HexadecimalFormatter>(),
+                false /* isAttached */,
+                ValueHelper<bool>::BoxValueIfNecessary(false),
                 nullptr);
     }
     if (!s_MinDigitsProperty)
@@ -62,6 +74,7 @@ void HexadecimalFormatterProperties::EnsureProperties()
 void HexadecimalFormatterProperties::ClearProperties()
 {
     s_InputPrefixesProperty = nullptr;
+    s_IsGroupedProperty = nullptr;
     s_MinDigitsProperty = nullptr;
     s_OutputPrefixProperty = nullptr;
 }
@@ -77,6 +90,19 @@ void HexadecimalFormatterProperties::InputPrefixes(winrt::IVector<winrt::IInspec
 winrt::IVector<winrt::IInspectable> HexadecimalFormatterProperties::InputPrefixes()
 {
     return ValueHelper<winrt::IVector<winrt::IInspectable>>::CastOrUnbox(static_cast<HexadecimalFormatter*>(this)->GetValue(s_InputPrefixesProperty));
+}
+
+void HexadecimalFormatterProperties::IsGrouped(bool value)
+{
+    [[gsl::suppress(con)]]
+    {
+    static_cast<HexadecimalFormatter*>(this)->SetValue(s_IsGroupedProperty, ValueHelper<bool>::BoxValueIfNecessary(value));
+    }
+}
+
+bool HexadecimalFormatterProperties::IsGrouped()
+{
+    return ValueHelper<bool>::CastOrUnbox(static_cast<HexadecimalFormatter*>(this)->GetValue(s_IsGroupedProperty));
 }
 
 void HexadecimalFormatterProperties::MinDigits(int value)
