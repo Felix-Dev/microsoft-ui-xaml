@@ -115,13 +115,16 @@ winrt::hstring HexadecimalFormatter::FormatUInt(unsigned __int64 value)
 
 // INumberParser
 
-wchar_t* HexadecimalFormatter::TrimLeadingZeroes(wchar_t* text, int* textLength)
+const std::wstring c_whitespace = L" \n\r\t\f\v";
+
+wchar_t* HexadecimalFormatter::TrimLeadingZeroesAndSpaces(wchar_t* text, int* textLength)
 {
     int sTextLength = *textLength;
     int i;
     for (i = 0; i < sTextLength - 1; i++)
     {
-        if (text[i] == '0')
+        const auto curChar = text[i];
+        if (curChar == '0' || c_whitespace.find(curChar) != wstring_view::npos)
         {
             continue;
         }
@@ -140,7 +143,7 @@ winrt::IReference<double> HexadecimalFormatter::ParseDouble(winrt::hstring text)
 
     int textLength = static_cast<int32_t>(wText.length());
 
-    // First step: Handle custom input prefixes and ignore them in then next input processing steps
+    // First step: Handle custom input prefixes and ignore them in the next input processing steps
 
     for (const auto inputPrefix : InputPrefixes())
     {
@@ -163,7 +166,7 @@ winrt::IReference<double> HexadecimalFormatter::ParseDouble(winrt::hstring text)
 
     // Second step: Trim leading zeroes
 
-    pText = TrimLeadingZeroes(pText, &textLength);
+    pText = TrimLeadingZeroesAndSpaces(pText, &textLength);
 
     // Third step: Convert from string form to matching number form, like L"80000000" -> 0x80000000
     // Here, we iterate over each character and try to convert each character to its corresponding
@@ -172,8 +175,17 @@ winrt::IReference<double> HexadecimalFormatter::ParseDouble(winrt::hstring text)
     uint64_t w64Bits = 0;
     for (int i = 0; i < textLength; i++)
     {
+        auto curChar = pText[i];
+
+        // If the current character is a whitespace character we skip it (we thus allow spaces between digits).
+        // TODO: COuld we move such a function into a string utility class (i.e. bool StringUtils::IsWhitespaceCharacter())?
+        if (c_whitespace.find(curChar) != wstring_view::npos)
+        {
+            continue;
+        }
+
         // We allow both upper and lower case letters for "A" - "F".
-        const auto curChar = NormalizeCharDigit(pText[i]);
+        curChar = NormalizeCharDigit(curChar);
 
         const size_t pos = HEX_DIGITS.find(curChar);
         if (pos != wstring_view::npos)

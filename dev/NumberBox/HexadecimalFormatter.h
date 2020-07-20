@@ -32,6 +32,6 @@ private:
     int GetStartIndex(__int64 value);
     winrt::hstring GetStringPrefix(const winrt::hstring& string, int numDigits);
 
-    wchar_t* TrimLeadingZeroes(wchar_t* text, int* textLength);
+    wchar_t* TrimLeadingZeroesAndSpaces(wchar_t* text, int* textLength);
 };
 
