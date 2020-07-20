@@ -94,10 +94,24 @@ winrt::hstring HexadecimalFormatter::NumberToString(__int64 value, int numDigits
     // "numDigits" tells us how many actual digits are needed to correctly represent the given value.
     // Here, we will start from the the highest required digits and "work our way down" the essential digits,
     // converting each digit to its string representation along the way while appending them.
+    const bool isGrouped = IsGrouped();
     while (numDigits-- > 0)
     {
         const int curHexValue = (value >> (4 * numDigits)) & 0xF;
         result += HEX_DIGITS[curHexValue];
+
+        // If the output should be grouped (every 4 digits starting from right are considered a group),
+        // we add a new whitespace between every two digit groups. numDigits contains the number of digits
+        // to process still left so if its a multiple of four, we know that we have to insert a space as the
+        // next character to be processed is the final charatcer of a group.
+        //
+        // TODO: Possible improvement: isGrouped is a constant here in the loop so perhaps we can create two versions of the loop here in order
+        // to only check isGrouped once.
+        if (isGrouped
+            && (numDigits % 4) == 0 && numDigits > 0)
+        {
+            result += ' ';
+        }
     }
 
     return winrt::hstring(result);
