@@ -88,6 +88,15 @@ namespace MUXControlsTestApp
             }
         }
 
+        private void IsGroupedCheckBox_CheckChanged(object sender, RoutedEventArgs e)
+        {
+            if (this.TestNumberBox.NumberFormatter is HexadecimalFormatter hexadecimalFormatter)
+            {
+                hexadecimalFormatter.IsGrouped = (bool)this.IsGroupedCheckBox.IsChecked;
+            }
+        }
+
+
         private void MinCheckBox_CheckChanged(object sender, RoutedEventArgs e)
         {
             MinNumberBox.IsEnabled = (bool)MinCheckBox.IsChecked;
