@@ -568,7 +568,6 @@ Global
 		dev\CommonStyles\TestUI\CommonStyles_TestUI.projitems*{a7f6d6c4-a5a9-43eb-930c-b766417a5e5c}*SharedItemsImports = 13
 		dev\Materials\Acrylic\TestUI\AcrylicBrush_TestUI.projitems*{a800e818-7212-4fd7-ae3a-1dcab539db87}*SharedItemsImports = 13
 		dev\Collections\Collections.vcxitems*{ad0c90b0-4845-4d4b-88f1-86f653f8171b}*SharedItemsImports = 4
-		dev\ComboBox\ComboBox.vcxitems*{ad0c90b0-4845-4d4b-88f1-86f653f8171b}*SharedItemsImports = 4
 		dev\CommonStyles\CommonStyles.vcxitems*{ad0c90b0-4845-4d4b-88f1-86f653f8171b}*SharedItemsImports = 4
 		dev\Common\Common.vcxitems*{ad0c90b0-4845-4d4b-88f1-86f653f8171b}*SharedItemsImports = 4
 		dev\DropDownButton\DropDownButton.vcxitems*{ad0c90b0-4845-4d4b-88f1-86f653f8171b}*SharedItemsImports = 4
@@ -577,9 +576,6 @@ Global
 		dev\Lights\Lights.vcxitems*{ad0c90b0-4845-4d4b-88f1-86f653f8171b}*SharedItemsImports = 4
 		dev\Materials\Acrylic\AcrylicBrush.vcxitems*{ad0c90b0-4845-4d4b-88f1-86f653f8171b}*SharedItemsImports = 4
 		dev\Materials\Reveal\RevealBrush.vcxitems*{ad0c90b0-4845-4d4b-88f1-86f653f8171b}*SharedItemsImports = 4
-		dev\NumberBox\NumberBox.vcxitems*{ad0c90b0-4845-4d4b-88f1-86f653f8171b}*SharedItemsImports = 4
-		dev\RadioButtons\RadioButtons.vcxitems*{ad0c90b0-4845-4d4b-88f1-86f653f8171b}*SharedItemsImports = 4
-		dev\Repeater\Repeater.vcxitems*{ad0c90b0-4845-4d4b-88f1-86f653f8171b}*SharedItemsImports = 4
 		dev\ResourceHelper\ResourceHelper.vcxitems*{ad0c90b0-4845-4d4b-88f1-86f653f8171b}*SharedItemsImports = 4
 		dev\SplitButton\SplitButton.vcxitems*{ad0c90b0-4845-4d4b-88f1-86f653f8171b}*SharedItemsImports = 4
 		dev\Telemetry\Telemetry.vcxitems*{ad0c90b0-4845-4d4b-88f1-86f653f8171b}*SharedItemsImports = 4
@@ -1005,7 +1001,6 @@ Global
 		{3566798E-9E24-44EF-B89D-2A62AE8F697A} = {0EC260CC-03C7-4790-B16A-43428EBCF5AD}
 		{675121BF-CABC-48E7-9C9D-4571BC507406} = {0EC260CC-03C7-4790-B16A-43428EBCF5AD}
 		{675373CE-6ACD-4C4B-A009-09A3C9B218E6} = {0EC260CC-03C7-4790-B16A-43428EBCF5AD}
-		{E6E42A4B-01D2-4CF4-9D24-98E9FF71669B} = {0EC260CC-03C7-4790-B16A-43428EBCF5AD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D93836AB-52D3-4DE2-AE25-23F26F55ECED}
