@@ -86,14 +86,86 @@ winrt::hstring HexadecimalFormatter::GetStringPrefix(const winrt::hstring& strin
     }
 
     const auto stringPrefix = OutputPrefix();
+
+    // Check if the requested number of digits is more than the actual number of digits needed to represent
+    // the specified value. If it is, we will add additional leading "0"s to it until we match the requested digit amount.
     if (minDigits > numDigits)
     {
-        // The requested number of digits is more than the actual number of digits needed to represent
-        // the specified value. As such, we will add additional leading "0"s to it until we matched the requested amount.
         const int digitsToAdd = minDigits - numDigits;
-        std::wstring digitPrefix(digitsToAdd, '0');
 
-        return winrt::hstring((static_cast<std::wstring>(stringPrefix)).append(digitPrefix));
+        // When visual grouping of the output value is requested, we need to make sure that the additional output digits we are adding
+        // will also take part in the grouping. (Note: A group consists of four digits.)
+        if (!IsGrouped())
+        {
+            // No visual grouping required: Simply create a string containing the requested amount of padding digits.
+            std::wstring digitPadding(digitsToAdd, '0');
+            return winrt::hstring((static_cast<std::wstring>(stringPrefix)).append(digitPadding));
+        }
+        else
+        {
+            // The display output needs to be grouped visually.
+            //
+            // The idea here is to _precompute_ the number of text characters we will actually have to add to the display string.
+            // These characters will consist of the padding digits and any whitespace character required for visual grouping.
+            // In other words:
+            //
+            //   num_textchars = num_padding_digits + num_whitespace_chars
+            // 
+            // Once we precomputed this number, we proceed to create a string containing [num_textchars] padding digits. That way,
+            // we already have a string with exactly the right length here and just need to replave te several padding digits
+            // which are taking up a whitespace character slot. With this, we just have _one_ string allocation opposed to building
+            // the string padding by hand, one character (either padding digit ot whitespace char) at a time.
+
+            // First compute how many padding digits will be added to the actual number string before a visual separation takes place.
+            // This will give us the renaming number of padding digits we will have to partition into visual groups. 
+            int numPaddingDigitsFittingInExistingGroup;
+            int newGroupsCounter = 0;
+
+            // Check if there is an existing group which can be filled with at most three of the required padding digits.
+            if (numDigits % 4 == 0)
+            {
+                // There is no existing group available which can be filled with some of the padding digits. As such, at least one new
+                // group has to be created.
+                numPaddingDigitsFittingInExistingGroup = 0;
+                newGroupsCounter++;
+            }
+            else
+            {
+                // There is an existing visual group which still has space for at least one of the padding digits to be added to it.
+                // We compute the amount of padding digits here which do not fit into that visual group.
+                numPaddingDigitsFittingInExistingGroup = 4 - (numDigits % 4);
+
+                // If there are more padding digits to be added to the output string than which would fit into the single existing group
+                // with some space left, we will add at least one additional visual group to the output string.
+                if (digitsToAdd > numPaddingDigitsFittingInExistingGroup)
+                {
+                    newGroupsCounter++;
+                }
+            }
+
+            // Now compute the number of groups the remaining padding digits will be partitioned into.
+            const int remainingPaddingDigitsAfterFirstGroup = digitsToAdd - numPaddingDigitsFittingInExistingGroup;
+            int numGroupsForRemainingPaddingDigits = remainingPaddingDigitsAfterFirstGroup / 4;
+            if (numGroupsForRemainingPaddingDigits > 0 && remainingPaddingDigitsAfterFirstGroup % 4 == 0)
+            {
+                numGroupsForRemainingPaddingDigits--;
+            }
+
+            newGroupsCounter += numGroupsForRemainingPaddingDigits;
+
+            // Create our digit padding string large enough to hold both the padding digits and the whitespace grouping
+            // characters.
+            std::wstring digitPadding(digitsToAdd + newGroupsCounter, '0');
+
+            // We now need to replace the existing padding characters ('0') in the actual whitespace slots of the padding string.
+            int replaceIndex = digitsToAdd + newGroupsCounter - numPaddingDigitsFittingInExistingGroup - 1;
+            for (int i = newGroupsCounter; i > 0; i--, replaceIndex -= 5)
+            {
+                digitPadding[replaceIndex] = ' ';
+            }
+
+            return winrt::hstring((static_cast<std::wstring>(stringPrefix)).append(digitPadding));
+        }
     }
 
     return stringPrefix;
