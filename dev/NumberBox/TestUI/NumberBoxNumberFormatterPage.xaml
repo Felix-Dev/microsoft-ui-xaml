@@ -22,60 +22,62 @@
         </muxc:HexadecimalFormatter>
     </local:TestPage.Resources>
 
-    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-        <muxc:NumberBox x:Name="NumberFormatterTestNumberBox"
-                        AcceptsExpression="{x:Bind (x:Boolean)AcceptsExpressionCheckBox.IsChecked, Mode=OneWay}"
-                        Header="NumberFormatterTest"
-                        Value="0"
-                        SpinButtonPlacementMode="Inline"
-                        MinWidth="300"/>
+    <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                  VerticalScrollBarVisibility="Auto">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <muxc:NumberBox x:Name="NumberFormatterTestNumberBox"
+                            AcceptsExpression="{x:Bind (x:Boolean)AcceptsExpressionCheckBox.IsChecked, Mode=OneWay}"
+                            Header="NumberFormatterTest"
+                            Value="0"
+                            SpinButtonPlacementMode="Inline"
+                            MinWidth="300"/>
 
-        <TextBlock Text="Configuration" Margin="0,20,0,0" Style="{StaticResource TitleTextBlockStyle}" />
+            <TextBlock Text="Configuration" Margin="0,20,0,0" Style="{StaticResource TitleTextBlockStyle}" />
 
-        <ComboBox x:Name="NumeralSystemModeComboBox"
+            <ComboBox x:Name="NumeralSystemModeComboBox"
                   Header="Numeral System Mode"
                   Margin="0,10,0,0"
                   SelectedIndex="-1">
-            <x:String>Decimal (default)</x:String>
-            <x:String>Hexadecimal</x:String>
-        </ComboBox>
+                <x:String>Decimal (default)</x:String>
+                <x:String>Hexadecimal</x:String>
+            </ComboBox>
 
-        <!-- Input configurations -->
-        <TextBlock Text="Input" Style="{StaticResource SubtitleTextBlockStyle}"
-                   Margin="0,15,0,10" />
+            <!-- Input configurations -->
+            <TextBlock Text="Input" Style="{StaticResource SubtitleTextBlockStyle}"
+                       Margin="0,15,0,10" />
 
-        <CheckBox x:Name="AcceptsExpressionCheckBox"
-                  Content="Accepts Expression"
-                  Margin="0,0,0,0"/>
+            <CheckBox x:Name="AcceptsExpressionCheckBox"
+                      Content="Accepts Expression"
+                      Margin="0,0,0,0"/>
 
-        <TextBox x:Name="InputPrefixesTextBox"
-                 Header="Input prefixes"
-                 LostFocus="InputPrefixesTextBox_LostFocus"
-                 Margin="0,10,0,0"/>
+            <TextBox x:Name="InputPrefixesTextBox"
+                     Header="Input prefixes"
+                     LostFocus="InputPrefixesTextBox_LostFocus"
+                     Margin="0,10,0,0"/>
 
-        <muxc:NumberBox x:Name="MinDigitsNumberBox"
-                        Header="Minimum number of Digits"
-                        Value="1"
-                        SpinButtonPlacementMode="Inline"
-                        Minimum="1" Maximum="16"
-                        Margin="0,10,0,0"
-                        ValueChanged="MinDigitsNumberBox_ValueChanged" />
+            <muxc:NumberBox x:Name="MinDigitsNumberBox"
+                            Header="Minimum number of Digits"
+                            Value="1"
+                            SpinButtonPlacementMode="Inline"
+                            Minimum="1" Maximum="16"
+                            Margin="0,10,0,0"
+                            ValueChanged="MinDigitsNumberBox_ValueChanged" />
 
-        <!-- Output configurations -->
-        <TextBlock Text="Output" Style="{StaticResource SubtitleTextBlockStyle}"
-                    Margin="0,15,0,10" />
+            <!-- Output configurations -->
+            <TextBlock Text="Output" Style="{StaticResource SubtitleTextBlockStyle}"
+                        Margin="0,15,0,10" />
 
-        <CheckBox x:Name="IsGroupedCheckBox" Content="Is Grouped"
-                          IsChecked="False"
-                          Checked="IsGroupedCheckBox_Checked"
-                          Unchecked="IsGroupedCheckBox_Unchecked"
-                  Margin="0,0,0,0"/>
+            <CheckBox x:Name="IsGroupedCheckBox" Content="Is Grouped"
+                      IsChecked="False"
+                      Checked="IsGroupedCheckBox_Checked"
+                      Unchecked="IsGroupedCheckBox_Unchecked"
+                      Margin="0,0,0,0"/>
 
-        <TextBox x:Name="OutputPrefixTextBox"
-                 Header="Output prefix (*)"
-                 contract7Present:Description="(*) The output prefix will automatically be added to the list of input prefixes."
-                 Margin="0,10,0,0"
-                 LostFocus="OutputPrefixTextBox_LostFocus"/>
-
-    </StackPanel>
+            <TextBox x:Name="OutputPrefixTextBox"
+                     Header="Output prefix (*)"
+                     contract7Present:Description="(*) The output prefix will automatically be added to the list of input prefixes."
+                     Margin="0,10,0,0"
+                     LostFocus="OutputPrefixTextBox_LostFocus"/>
+        </StackPanel>
+    </ScrollViewer>
 </local:TestPage>
