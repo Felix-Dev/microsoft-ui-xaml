@@ -525,13 +525,15 @@ namespace Windows.UI.Xaml.Tests.MUXControls.ApiTests
                 Verify.AreEqual(
                     AutomationControlType.ListItem,
                     NavigationViewItemAutomationPeer.CreatePeerForElement(menuItem1).GetAutomationControlType());
+                Verify.IsNull(NavigationViewItemAutomationPeer.CreatePeerForElement(menuItem1).GetPattern(PatternInterface.Invoke));
 
                 navView.PaneDisplayMode = NavigationViewPaneDisplayMode.Top;
                 Content.UpdateLayout();
                 Verify.AreEqual(
                     AutomationControlType.TabItem,
                     NavigationViewItemAutomationPeer.CreatePeerForElement(menuItem1).GetAutomationControlType());
-
+                // Tabs should only provide SelectionItem pattern but not Invoke pattern
+                Verify.IsNull(NavigationViewItemAutomationPeer.CreatePeerForElement(menuItem1).GetPattern(PatternInterface.Invoke));
             });
         }
 
@@ -564,7 +566,6 @@ namespace Windows.UI.Xaml.Tests.MUXControls.ApiTests
                 Verify.IsNotNull(expandPeer,"Verify NavigationViewItem without children but with UnrealizedChildren set to true has an ExpandCollapse pattern provided");
             });
         }
-
 
         [TestMethod]
         public void VerifySettingsItemToolTip()
@@ -609,7 +610,8 @@ namespace Windows.UI.Xaml.Tests.MUXControls.ApiTests
         }
 
         // Disabled per GitHub Issue #211
-        //[TestMethod]
+        [TestMethod]
+        [TestProperty("Ignore", "True")]
         public void VerifyCanNotAddWUXItems()
         {
             if (!ApiInformation.IsTypePresent("Windows.UI.Xaml.Controls.NavigationViewItem"))
@@ -852,5 +854,23 @@ namespace Windows.UI.Xaml.Tests.MUXControls.ApiTests
             });
         }
 
+        [TestMethod]
+        public void VerifyOverflowButtonToolTip()
+        {
+            RunOnUIThread.Execute(() =>
+            {
+                var navView = new NavigationView();
+                navView.PaneDisplayMode = NavigationViewPaneDisplayMode.Top;
+
+                Content = navView;
+                Content.UpdateLayout();
+
+                var overflowButton = VisualTreeUtils.FindVisualChildByName(navView, "TopNavOverflowButton") as Button;
+                var toolTipObject = ToolTipService.GetToolTip(overflowButton);
+
+                bool testCondition = toolTipObject is ToolTip toolTip && toolTip.Content.Equals("More");
+                Verify.IsTrue(testCondition, "ToolTip text should have been \"More\".");
+            });
+        }
     }
 }

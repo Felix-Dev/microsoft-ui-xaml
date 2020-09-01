@@ -9,6 +9,8 @@ using Windows.Graphics.Display;
 using Windows.System.Threading;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Input;
 
 // The Templated Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234235
 
@@ -25,6 +27,7 @@ namespace MUXControlsTestApp
         private Button _goBackInvokerButton = null;
         private Button _goFullScreenInvokerButton = null;
         private Button _toggleThemeButton = null;
+        private ToggleButton _innerFrameInLabDimensions = null;
         private Button _closeAppInvokerButton = null;
         private Button _waitForIdleInvokerButton = null;
         private CheckBox _idleStateEnteredCheckBox = null;
@@ -36,12 +39,24 @@ namespace MUXControlsTestApp
         private CheckBox _debuggerAttachedCheckBox = null;
         private TextBox _unhandledExceptionReportingTextBox = null;
         private Type _mainPageType = null;
+        private ContentPresenter _pagePresenter = null;
+        private CheckBox _keyInputReceived = null;
 
         public TestFrame(Type mainPageType)
         {
             _mainPageType = mainPageType;
             this.DefaultStyleKey = typeof(TestFrame);
             Application.Current.UnhandledException += OnUnhandledException;
+
+            AddHandler(FrameworkElement.KeyDownEvent, new KeyEventHandler(TestFrame_KeyDown) , true);
+        }
+
+        private void TestFrame_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
+        {
+            if(_keyInputReceived != null)
+            {
+                _keyInputReceived.IsChecked = true;
+            }
         }
 
         public void ChangeBarVisibility(Visibility visibility)
@@ -96,6 +111,11 @@ namespace MUXControlsTestApp
             _toggleThemeButton = (Button)GetTemplateChild("ToggleThemeButton");
             _toggleThemeButton.Click += ToggleThemeButton_Click;
 
+            _pagePresenter = (ContentPresenter)GetTemplateChild("PagePresenter");
+
+            _innerFrameInLabDimensions = (ToggleButton)GetTemplateChild("InnerFrameInLabDimensions");
+            _innerFrameInLabDimensions.Click += _innerFrameInLabDimensions_Click;
+
             _goBackInvokerButton = (Button)GetTemplateChild("GoBackInvokerButton");
             _goBackInvokerButton.Click += GoBackInvokerButton_Click;
 
@@ -126,6 +146,23 @@ namespace MUXControlsTestApp
             _goFullScreenInvokerButton.Click += GoFullScreenInvokeButton_Click;
 
             _unhandledExceptionReportingTextBox = (TextBox)GetTemplateChild("UnhandledExceptionReportingTextBox");
+            _keyInputReceived = (CheckBox)GetTemplateChild("KeyInputReceived");
+        }
+
+        private void _innerFrameInLabDimensions_Click(object sender, RoutedEventArgs e)
+        {
+            if(double.IsInfinity(_pagePresenter.MaxWidth))
+            {
+                // Not CI mode, so enter it now
+                _pagePresenter.MaxWidth = 1024;
+                _pagePresenter.MaxHeight = 664;
+            }
+            else
+            {
+                // We are already in "CI mode"
+                _pagePresenter.ClearValue(MaxWidthProperty);
+                _pagePresenter.ClearValue(MaxHeightProperty);
+            }
         }
 
         private void ToggleThemeButton_Click(object sender,RoutedEventArgs e)

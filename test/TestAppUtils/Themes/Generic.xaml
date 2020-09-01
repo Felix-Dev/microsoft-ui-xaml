@@ -44,11 +44,17 @@
                                         <SymbolIcon Symbol="Back"/>
                                     </Button>
                                     <Button x:Name="ToggleThemeButton"
-                                        VerticalAlignment="Stretch"
+                                        VerticalAlignment="Stretch" Margin="0,0,4,0"
                                         Style="{ThemeResource AccentButtonStyle}"
                                         AutomationProperties.AutomationId="__ToggleThemeButton" 
                                         Content="Toggle theme">
                                     </Button>
+                                    <ToggleButton
+                                        x:Name="InnerFrameInLabDimensions"
+                                        MaxHeight="25"
+                                        Padding="0"  Margin="0,0,4,0"
+                                        AutomationProperties.AutomationId="__InnerFrameInLabDimensions"
+                                        Content="Render innerframe in lab dimensions"/>
 
                                     <TextBlock x:Name="CurrentPageTextBlock" AutomationProperties.AutomationId="__CurrentPage"  FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0"/>
                                 </StackPanel>
@@ -78,10 +84,11 @@
                                 <CheckBox x:Name="DebuggerAttachedCheckBox" AutomationProperties.AutomationId="__DebuggerAttachedCheckBox" Style="{StaticResource AutomationHelperStyle}" />
                                 <TextBox x:Name="UnhandledExceptionReportingTextBox" AutomationProperties.AutomationId="__UnhandledExceptionReportingTextBox" Style="{StaticResource AutomationHelperStyle}" AcceptsReturn="True" />
                                 <CheckBox x:Name="TestContentLoadedCheckBox" IsChecked="False" AutomationProperties.AutomationId="__TestContentLoadedCheckBox" Content="TestContentLoadedCheckbox"  Style="{StaticResource AutomationHelperStyle}" />
-
+                                <CheckBox x:Name="KeyInputReceived" IsChecked="True" AutomationProperties.AutomationId="__KeyInputReceived" Style="{StaticResource AutomationHelperStyle}" />
                             </Grid>
 
                             <ContentPresenter Grid.Row="2"
+                                    x:Name="PagePresenter"
                                     Content="{TemplateBinding Content}"
                                     Background="{TemplateBinding Background}"
                                     BorderBrush="{TemplateBinding BorderBrush}"

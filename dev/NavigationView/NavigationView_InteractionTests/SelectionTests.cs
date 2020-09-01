@@ -39,7 +39,8 @@ namespace Windows.UI.Xaml.Tests.MUXControls.InteractionTests.NavigationViewTests
             TestEnvironment.Initialize(testContext);
         }
 
-        //[TestMethod]
+        [TestMethod]
+        [TestProperty("Ignore", "True")]
         // Disabled due to: Multiple unreliable NavigationView tests #134
         public void SuppressSelectionItemInvokeTest()
         {
@@ -212,7 +213,7 @@ namespace Windows.UI.Xaml.Tests.MUXControls.InteractionTests.NavigationViewTests
                 var SettingsSelectionStateTextBlock = new TextBlock(FindElement.ByName("SettingsSelectedState"));
 
                 var settings = new Button(FindElement.ByName("Settings"));
-                settings.Invoke();
+                settings.Click();
                 Wait.ForIdle();
 
                 Log.Comment("Verify the top settings item is selected.");
@@ -373,13 +374,13 @@ namespace Windows.UI.Xaml.Tests.MUXControls.InteractionTests.NavigationViewTests
                 // Select apps
                 using (var waiter = new ValueChangedEventWaiter(invokeResult))
                 {
-                    apps.Invoke();
+                    apps.Click();
                     waiter.Wait();
                 }
 
                 Verify.AreEqual(selectResult.Value, "Apps");
 
-                setInvalidSelectedItemButton.Invoke();
+                setInvalidSelectedItemButton.Click();
                 Wait.ForIdle();
 
                 Verify.AreEqual(selectResult.Value, "Null");

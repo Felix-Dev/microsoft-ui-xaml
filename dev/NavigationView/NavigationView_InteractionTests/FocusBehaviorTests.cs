@@ -47,7 +47,7 @@ namespace Windows.UI.Xaml.Tests.MUXControls.InteractionTests.NavigationViewTests
                 var SettingsSelectionStateTextBlock = new TextBlock(FindElement.ByName("SettingsSelectedState"));
 
                 var leftSettingsItem = new Button(FindElement.ByName("Settings"));
-                leftSettingsItem.Invoke();
+                leftSettingsItem.Click();
 
                 Log.Comment("Verify the left settings item is selected.");
                 readSettingsSelectedButton.Invoke();
@@ -101,6 +101,7 @@ namespace Windows.UI.Xaml.Tests.MUXControls.InteractionTests.NavigationViewTests
                 Verify.IsNotNull(focusedElement);
             }
         }
+
         [TestMethod]
         public void EnsureLeftSettingsRetainsFocusAfterOrientationChanges()
         {
@@ -114,8 +115,8 @@ namespace Windows.UI.Xaml.Tests.MUXControls.InteractionTests.NavigationViewTests
                 flipOrientationButton.Invoke();
                 Wait.ForIdle();
 
-                var topSettingsItem = new Button(FindElement.ByName("SettingsTopNavPaneItem"));
-                topSettingsItem.Invoke();
+                var topSettingsItem = new Button(FindElement.ByName("Settings"));
+                topSettingsItem.Click();
 
                 Log.Comment("Verify the top settings item is selected.");
                 readSettingsSelectedButton.Invoke();
@@ -466,6 +467,86 @@ namespace Windows.UI.Xaml.Tests.MUXControls.InteractionTests.NavigationViewTests
                 Wait.ForIdle();
                 Verify.IsTrue(togglePaneButton.HasKeyboardFocus);
 
+            }
+        }
+
+        [TestMethod]
+        public void VerifyShoulderNavigationEnabledAlwaysIsConsistent()
+        {
+            using (var setup = new TestSetupHelper(new[] { "NavigationView Tests", "Top NavigationView Test" }))
+            {
+                var navView = FindElement.ByName("NavView");
+                var shoulderNavigationEnabled = new ComboBox(FindElement.ByName("ShoulderNavigationEnabledSetter"));
+                var selectionFollowsFocusComboBox = new ComboBox(FindElement.ByName("SelectionFollowsFocusSetter"));
+
+                Log.Comment("Set ShoulderNavigation to always");
+                shoulderNavigationEnabled.SelectItemByName("ShoulderNavigationEnabledAlways");
+
+                Log.Comment("Set SelectionFollowsFocus to enabled");
+                selectionFollowsFocusComboBox.SelectItemByName("SelectionFollowsFocusEnabled");
+
+                Log.Comment("Select first item");
+                FindElement.ByName("Home").Click();
+                Wait.ForIdle();
+                Verify.AreEqual("Home", GetSelectedItem());
+
+                GamepadHelper.PressButton(navView, GamepadButton.RightShoulder);
+                Wait.ForIdle();
+                Verify.AreEqual("Apps", GetSelectedItem());
+
+                Log.Comment("Set SelectionFollowsFocus to disabled");
+                selectionFollowsFocusComboBox.SelectItemByName("SelectionFollowsFocusDisabled");
+                Wait.ForIdle();
+
+                GamepadHelper.PressButton(navView, GamepadButton.RightShoulder);
+
+                Wait.ForIdle();
+                Verify.AreEqual("Games", GetSelectedItem());
+            }
+
+            string GetSelectedItem()
+            {
+                return FindElement.ByName("SelectionChangedResult").GetText();
+            }
+        }
+
+        [TestMethod]
+        public void VerifyShoulderNavigationEnabledOnlySelectionFollowsFocusIsCorrect()
+        {
+            using (var setup = new TestSetupHelper(new[] { "NavigationView Tests", "Top NavigationView Test" }))
+            {
+                var navView = FindElement.ByName("NavView");
+                var shoulderNavigationEnabled = new ComboBox(FindElement.ByName("ShoulderNavigationEnabledSetter"));
+                var selectionFollowsFocusComboBox = new ComboBox(FindElement.ByName("SelectionFollowsFocusSetter"));
+
+                Log.Comment("Set ShoulderNavigation to always");
+                shoulderNavigationEnabled.SelectItemByName("ShoulderNavigationEnabledWhenSelectionFollowsFocus");
+
+                Log.Comment("Set SelectionFollowsFocus to enabled");
+                selectionFollowsFocusComboBox.SelectItemByName("SelectionFollowsFocusEnabled");
+
+                Log.Comment("Select first item");
+                FindElement.ByName("Home").Click();
+                Wait.ForIdle();
+                Verify.AreEqual("Home", GetSelectedItem());
+
+                GamepadHelper.PressButton(navView, GamepadButton.RightShoulder);
+                Wait.ForIdle();
+                Verify.AreEqual("Apps", GetSelectedItem());
+
+                Log.Comment("Set SelectionFollowsFocus to disabled");
+                selectionFollowsFocusComboBox.SelectItemByName("SelectionFollowsFocusDisabled");
+                Wait.ForIdle();
+
+                GamepadHelper.PressButton(navView, GamepadButton.RightShoulder);
+
+                Wait.ForIdle();
+                Verify.AreEqual("Apps", GetSelectedItem());
+            }
+
+            string GetSelectedItem()
+            {
+                return FindElement.ByName("SelectionChangedResult").GetText();
             }
         }
     }
