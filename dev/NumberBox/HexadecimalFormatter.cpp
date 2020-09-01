@@ -9,6 +9,8 @@
 // digits 0..15 used by the hexadecimal numeral system
 static constexpr wstring_view HEX_DIGITS = L"0123456789ABCDEF";
 
+static constexpr wstring_view c_whitespace = L" \n\r\t\f\v";
+
 HexadecimalFormatter::HexadecimalFormatter()
 {
     const auto inputPrefixes = winrt::make<Vector<winrt::hstring, MakeVectorParam<VectorFlag::Observable>()>>();
@@ -35,6 +37,16 @@ winrt::hstring HexadecimalFormatter::FormatDouble(double value)
     // append the rcomputed output prefix to the string representation and return the result
     const auto endResult = static_cast<std::wstring>(outputPrefix).append(numberResult);
     return winrt::hstring(endResult);
+}
+
+winrt::hstring HexadecimalFormatter::FormatInt(__int64 value)
+{
+    winrt::throw_hresult(E_NOTIMPL);
+}
+
+winrt::hstring HexadecimalFormatter::FormatUInt(unsigned __int64 value)
+{
+    winrt::throw_hresult(E_NOTIMPL);
 }
 
 int HexadecimalFormatter::GetStartIndex(__int64 value)
@@ -117,38 +129,7 @@ winrt::hstring HexadecimalFormatter::NumberToString(__int64 value, int numDigits
     return winrt::hstring(result);
 }
 
-winrt::hstring HexadecimalFormatter::FormatInt(__int64 value)
-{
-    winrt::throw_hresult(E_NOTIMPL);
-}
-
-winrt::hstring HexadecimalFormatter::FormatUInt(unsigned __int64 value)
-{
-    winrt::throw_hresult(E_NOTIMPL);
-}
-
 // INumberParser
-
-const std::wstring c_whitespace = L" \n\r\t\f\v";
-
-wchar_t* HexadecimalFormatter::TrimLeadingZeroesAndSpaces(wchar_t* text, int* textLength)
-{
-    int sTextLength = *textLength;
-    int i;
-    for (i = 0; i < sTextLength - 1; i++)
-    {
-        const auto curChar = text[i];
-        if (curChar == '0' || c_whitespace.find(curChar) != wstring_view::npos)
-        {
-            continue;
-        }
-
-        break;
-    }
-
-    *textLength = sTextLength - i;
-    return (text + i);
-}
 
 winrt::IReference<double> HexadecimalFormatter::ParseDouble(winrt::hstring text)
 {
@@ -185,7 +166,7 @@ winrt::IReference<double> HexadecimalFormatter::ParseDouble(winrt::hstring text)
         auto curChar = pText[i];
 
         // If the current character is a whitespace character we skip it (we thus allow spaces between digits).
-        // TODO: COuld we move such a function into a string utility class (i.e. bool StringUtils::IsWhitespaceCharacter())?
+        // TODO: Could we move such a function into a string utility class (i.e. bool StringUtils::IsWhitespaceCharacter())?
         if (c_whitespace.find(curChar) != wstring_view::npos)
         {
             continue;
@@ -197,10 +178,10 @@ winrt::IReference<double> HexadecimalFormatter::ParseDouble(winrt::hstring text)
         const size_t pos = HEX_DIGITS.find(curChar);
         if (pos != wstring_view::npos)
         {
-            // We could successfully convert the current character into its matching numerical
-            // representation.
-            // As in any number base the value of the i-th digit is d * base^i (where d is the digit, b is the base and i is the index of the digit in the number),
-            // the actual decimal value of the number is the sum of (i = 0 - [num bits -1]) -> d * base^i.
+            // We could successfully convert the current character into its matching numerical representation.
+            //
+            // As in any number base the value of the i-th digit is d * b^i (where d is the digit, b is the base and i is the index of the digit in the number),
+            // the actual decimal value of the number is the sum of (i = 0 - [num bits -1]) -> d * b^i.
             // In our case here, our base is 16 and we follow the formula above to compute the actual decimal value of the given string number.
             // Since we start with the upper digits first, each character processed here will be multipled with the value 16 (our base) one more time than
             // its direct successor in the string. In other words, by the time we are done, the first character here will have been multiplied with 16
@@ -232,11 +213,6 @@ winrt::IReference<double> HexadecimalFormatter::ParseDouble(winrt::hstring text)
     return value;
 }
 
-wchar_t HexadecimalFormatter::NormalizeCharDigit(wchar_t c)
-{
-    return static_cast<wchar_t>(toupper(c));
-}
-
 winrt::IReference<__int64> HexadecimalFormatter::ParseInt(winrt::hstring text)
 {
     winrt::throw_hresult(E_NOTIMPL);
@@ -245,4 +221,28 @@ winrt::IReference<__int64> HexadecimalFormatter::ParseInt(winrt::hstring text)
 winrt::IReference<unsigned __int64> HexadecimalFormatter::ParseUInt(winrt::hstring text)
 {
     winrt::throw_hresult(E_NOTIMPL);
+}
+
+wchar_t* HexadecimalFormatter::TrimLeadingZeroesAndSpaces(wchar_t* text, int* textLength)
+{
+    int sTextLength = *textLength;
+    int i;
+    for (i = 0; i < sTextLength - 1; i++)
+    {
+        const auto curChar = text[i];
+        if (curChar == '0' || c_whitespace.find(curChar) != wstring_view::npos)
+        {
+            continue;
+        }
+
+        break;
+    }
+
+    *textLength = sTextLength - i;
+    return (text + i);
+}
+
+wchar_t HexadecimalFormatter::NormalizeCharDigit(wchar_t c)
+{
+    return static_cast<wchar_t>(toupper(c));
 }
