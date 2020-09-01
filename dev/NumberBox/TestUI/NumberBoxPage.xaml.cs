@@ -15,7 +15,6 @@ using Windows.UI.Xaml.Markup;
 
 namespace MUXControlsTestApp
 {
-    [TopLevelTestPage(Name = "NumberBox")]
     public sealed partial class NumberBoxPage : TestPage
     {
         public DataModelWithINPC DataModelWithINPC { get; set; } = new DataModelWithINPC();
@@ -79,42 +78,6 @@ namespace MUXControlsTestApp
                 }
             }
         }
-
-        private void NumeralSystemComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (TestNumberBox != null)
-            {
-                if (this.NumeralSystemComboBox.SelectedIndex == 0)
-                {
-                    // Decimal numeral system
-
-                    var formatter = new DecimalFormatter {
-                        IntegerDigits = 1,
-                        FractionDigits = 0
-                    };
-
-                    this.TestNumberBox.NumberFormatter = formatter;
-                }
-                else if (this.NumeralSystemComboBox.SelectedIndex == 1)
-                {
-                    // Hexadecimal numeral system
-
-                    // Play with the different properties of the HexadecimalFormatter formatter here.
-                    var formatter = new HexadecimalFormatter();
-
-                    TestNumberBox.NumberFormatter = formatter;
-                }
-            }
-        }
-
-        private void IsGroupedCheckBox_CheckChanged(object sender, RoutedEventArgs e)
-        {
-            if (this.TestNumberBox.NumberFormatter is HexadecimalFormatter hexadecimalFormatter)
-            {
-                hexadecimalFormatter.IsGrouped = (bool)this.IsGroupedCheckBox.IsChecked;
-            }
-        }
-
 
         private void MinCheckBox_CheckChanged(object sender, RoutedEventArgs e)
         {
