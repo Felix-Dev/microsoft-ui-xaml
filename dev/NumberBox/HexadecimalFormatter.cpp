@@ -103,22 +103,23 @@ winrt::hstring HexadecimalFormatter::GetStringPrefix(const winrt::hstring& strin
         }
         else
         {
-            // The display output needs to be grouped visually.
+            // The display output needs to be grouped visually. As such, the padding digits to be added here need to participate in the
+            // grouping.
             //
             // The idea here is to _precompute_ the number of text characters we will actually have to add to the display string.
-            // These characters will consist of the padding digits and any whitespace character required for visual grouping.
+            // These characters will consist of the padding digits and any whitespace characters required for visual grouping.
             // In other words:
             //
             //   num_textchars = num_padding_digits + num_whitespace_chars
             // 
             // Once we precomputed this number, we proceed to create a string containing [num_textchars] padding digits. That way,
-            // we already have a string with exactly the right length here and just need to replave te several padding digits
-            // which are taking up a whitespace character slot. With this, we just have _one_ string allocation opposed to building
-            // the string padding by hand, one character (either padding digit ot whitespace char) at a time.
+            // we already have a string with exactly the right length here and just need to replace the several padding digits
+            // currently occupying a whitespace character slot. With this, we just have _one_ string allocation compared to when building
+            // the string padding by hand, appending one character (either padding digit ot whitespace char) at a time.
 
             // First compute how many padding digits will be added to the actual number string before a visual separation takes place.
-            // This will give us the renaming number of padding digits we will have to partition into visual groups. 
-            int numPaddingDigitsFittingInExistingGroup;
+            // This will give us the remaining number of padding digits we will have to partition into visual groups. 
+            int numPaddingDigitsFittingIntoExistingGroup;
             int newGroupsCounter = 0;
 
             // Check if there is an existing group which can be filled with at most three of the required padding digits.
@@ -126,27 +127,27 @@ winrt::hstring HexadecimalFormatter::GetStringPrefix(const winrt::hstring& strin
             {
                 // There is no existing group available which can be filled with some of the padding digits. As such, at least one new
                 // group has to be created.
-                numPaddingDigitsFittingInExistingGroup = 0;
+                numPaddingDigitsFittingIntoExistingGroup = 0;
                 newGroupsCounter++;
             }
             else
             {
                 // There is an existing visual group which still has space for at least one of the padding digits to be added to it.
                 // We compute the amount of padding digits here which do not fit into that visual group.
-                numPaddingDigitsFittingInExistingGroup = 4 - (numDigits % 4);
+                numPaddingDigitsFittingIntoExistingGroup = 4 - (numDigits % 4);
 
                 // If there are more padding digits to be added to the output string than which would fit into the single existing group
                 // with some space left, we will add at least one additional visual group to the output string.
-                if (digitsToAdd > numPaddingDigitsFittingInExistingGroup)
+                if (digitsToAdd > numPaddingDigitsFittingIntoExistingGroup)
                 {
                     newGroupsCounter++;
                 }
             }
 
             // Now compute the number of groups the remaining padding digits will be partitioned into.
-            const int remainingPaddingDigitsAfterFirstGroup = digitsToAdd - numPaddingDigitsFittingInExistingGroup;
-            int numGroupsForRemainingPaddingDigits = remainingPaddingDigitsAfterFirstGroup / 4;
-            if (numGroupsForRemainingPaddingDigits > 0 && remainingPaddingDigitsAfterFirstGroup % 4 == 0)
+            const int remainingPaddingDigitsAfterFillingExistingGroup = digitsToAdd - numPaddingDigitsFittingIntoExistingGroup;
+            int numGroupsForRemainingPaddingDigits = remainingPaddingDigitsAfterFillingExistingGroup / 4;
+            if (numGroupsForRemainingPaddingDigits > 0 && remainingPaddingDigitsAfterFillingExistingGroup % 4 == 0)
             {
                 numGroupsForRemainingPaddingDigits--;
             }
@@ -157,8 +158,8 @@ winrt::hstring HexadecimalFormatter::GetStringPrefix(const winrt::hstring& strin
             // characters.
             std::wstring digitPadding(digitsToAdd + newGroupsCounter, '0');
 
-            // We now need to replace the existing padding characters ('0') in the actual whitespace slots of the padding string.
-            int replaceIndex = digitsToAdd + newGroupsCounter - numPaddingDigitsFittingInExistingGroup - 1;
+            // We now need to replace the existing padding characters ('0') occupying the actual whitespace slots of the padding string.
+            int replaceIndex = digitsToAdd + newGroupsCounter - numPaddingDigitsFittingIntoExistingGroup - 1;
             for (int i = newGroupsCounter; i > 0; i--, replaceIndex -= 5)
             {
                 digitPadding[replaceIndex] = ' ';
